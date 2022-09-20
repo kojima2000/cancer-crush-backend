@@ -33,7 +33,7 @@ setup(
     'falcon>=3.1',
     'waitress>=2.1',
     'PyYaml>=6.0',
-    'falcon-auth[backend-jwt]'],
+    'falcon-auth[backend-jwt]',
     'mysql-connector-python>=8.0',
     'protobuf>=3.0',
     'waitress>=2.1'],
