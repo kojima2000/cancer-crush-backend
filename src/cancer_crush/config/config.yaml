@@ -1,0 +1,7 @@
+JWT:
+  Secret: "Test"
+Database:
+  Host: "localhost"
+  Username: "test"
+  Password: "test123"
+  Databse: ""

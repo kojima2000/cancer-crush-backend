@@ -11,6 +11,7 @@
 import click
 from . import __version__
 from .server.server import start_server
+from .config.config_loader import ConfigLoader
 
 @click.command()
 @click.version_option(version=__version__)

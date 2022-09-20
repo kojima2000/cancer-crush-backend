@@ -5,14 +5,10 @@
 # Created: 09/20/2022                                #
 # Last Edited: 09/20/2022                            #
 # ================================================== #
-#                      IMPORTS                       #
+#                                                    #
 # ================================================== #
 
 from setuptools import setup, find_packages
-
-# ================================================== #
-#                       SETUP                        #
-# ================================================== #
 
 setup(
     name='Cancer Crush API',
@@ -35,8 +31,10 @@ setup(
     ],
     install_requires=['click>=8.1',
     'falcon>=3.1',
+    'waitress>=2.1',
+    'PyYaml>=6.0',
     'falcon-auth>=1.1',
-    'waitress>=2.1'],
+    'falcon-auth[backend-jwt]'],
     entry_points={
         'console_scripts': ['cc-start = cancer_crush.cli:main'],
     }
