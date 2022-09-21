@@ -79,9 +79,8 @@ class SetupMySqlDatabase:
                 print("Tables created successfully!")
 
                 # insert sample data
-                # read JSON file which is in the next parent folder
-                #C:\Users\ntippabhatla\Hackathon-1\cancer-crush-backend\src\cancer_crush\config
-                file = os.path.abspath('../../..') + "/ntippabhatla/Hackathon-1/cancer-crush-backend/src/cancer_crush/config/questions.json"
+                # read JSON file which is in the next parent fold
+                file = os.path.abspath('../../..') + "/source/repos/cancer-crush-backend/src/cancer_crush/config/questions.json"
                 json_data=open(file).read()
                 json_obj = json.loads(json_data, strict=False)
 
