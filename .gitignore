@@ -233,3 +233,4 @@ $RECYCLE.BIN/
 
 # Project files
 src/cancer_crush/config/config.yaml
+.vs

@@ -22,9 +22,10 @@ class QuizQuestions:
         curs = self.connection.cursor()
         try:
             curs.execute("SELECT * FROM quizQuestions")
-            result = curs.fetchall()
-            resp.data = msgpack.packb(result, use_bin_type=True)
-            resp.content_type = falcon.MEDIA_JSON
+            record = curs.fetchall()
+            r = [dict((curs.description[i][0], value) \
+               for i, value in enumerate(row)) for row in record]
+            resp.text = json.dumps(r)
             resp.status = falcon.HTTP_200
         except Error as e:
             print("Error while getting questions from MySql", e)

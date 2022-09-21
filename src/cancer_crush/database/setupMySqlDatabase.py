@@ -104,11 +104,13 @@ class SetupMySqlDatabase:
                     choice_C =  self.validate_string(item.get("Choice_C", None))
                     choice_D =  self.validate_string(item.get("Choice_D", None))
                     answer_details = self.validate_string(item.get("Answer_details", None))
-                    links =  str(self.validate_string(item.get("Links", None)))
+                    #links =  str(self.validate_string(item.get("Links", None)))
+
+
 
                     cursor.execute(
-                        "INSERT INTO QuizQuestions  (Patient_age,Patient_sex,Question,Patient_history,Correct_answer, Choice_A, Choice_B,Choice_C,Choice_D, Answer_details) VALUES (%s,	%s,	%s, %s, %s, %s, %s, %s, %s, %s)",
-                        (patient_age,patient_sex,question,patient_history,correct_answer,choice_A,choice_B,choice_C,choice_D, answer_details))
+                        "INSERT INTO `QuizQuestions`  (`Patient_age`,`Patient_sex`,`Question`,`Patient_history`,`Correct_answer`,`Choice_A`, `Choice_B`,`Choice_C`,`Choice_D`,`Answer_details`) VALUES (%s,	%s,	%s, %s, %s, %s, %s, %s, %s, %s)",
+                        (patient_age,patient_sex,question,patient_history,correct_answer,choice_A,choice_B,choice_C,choice_D,answer_details))
                 self.connection.commit()
                 print("Sample questions inserted successfully!")
 
