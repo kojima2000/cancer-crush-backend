@@ -36,7 +36,8 @@ setup(
     'falcon-auth[backend-jwt]',
     'mysql-connector-python>=8.0',
     'protobuf>=3.0',
-    'waitress>=2.1'],
+    'waitress>=2.1',
+    'msgpack>=1.0'],
     entry_points={
         'console_scripts': ['cc-start = cancer_crush.cli:main'],
     }

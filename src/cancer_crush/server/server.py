@@ -13,6 +13,7 @@ import falcon
 from falcon_auth import FalconAuthMiddleware, JWTAuthBackend
 from ..config.config_loader import ConfigLoader
 from ..database.setupMySqlDatabase import SetupMySqlDatabase
+from ..endpoints.quizQuestions import QuizQuestions
 
 class TestResource:
     def on_get(self, req, resp):
@@ -20,17 +21,6 @@ class TestResource:
         resp.status = falcon.HTTP_200  # This is the default status
         resp.content_type = falcon.MEDIA_TEXT  # Default is JSON, so override
         resp.text = ('Test Endpoint')
-        return resp
-
-class QuizQuestion:
-    def on_get(self, req, resp):
-        connection = connect_db()
-
-    def on_post(self, req, resp):
-        resp.status = falcon.HTTP_200  # This is the default status
-        resp.content_type = falcon.MEDIA_TEXT  # Default is JSON, so override
-        resp.text = ('Question Endpoint')
-
 
 def start_server(socket="", port=8080):
     config = ConfigLoader()
@@ -42,7 +32,7 @@ def start_server(socket="", port=8080):
     app = falcon.App(middleware=[auth_middleware])
     mySql_db.setup_db()
     test = TestResource()
-    questions = QuizQuestion()
+    questions = QuizQuestions()
     app.add_route('/test', test)
     app.add_route('/questions', questions)
 
