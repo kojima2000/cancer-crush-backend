@@ -3,13 +3,5 @@ JWT:
 Database:
   Host: "localhost"
   Username: "root"
-<<<<<<< HEAD
   Password: "hackathon2022"
   Name: "CancerCrush"
-||||||| fdc3cca
-  Password: "Microsoft123$"
-  Name: "CancerCrush"
-=======
-  Password: "Microsoft123$"
-  Name: "CancerCrush1"
->>>>>>> c1bb02928274fe7bb083d63157abb9efdf8ebfbe

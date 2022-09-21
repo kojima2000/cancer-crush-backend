@@ -45,12 +45,16 @@ class LoginService:
         :param req: HTTP request
         :param resp: HTTP response
         """
+        # Validate fields
         if not email or not password:
             raise falcon.HTTPBadRequest("Bad Request", "Please enter a valid email and password.")
         else:
+            # Verify user exists
             user = User().get_user(email, password)
             if not user:
                 raise falcon.HTTPUnauthorized("Incorrect Password", "The password you entered was incorrect. Please try again.")
+
+            # Generate JWT token
             current_time = datetime.utcnow()
             payload = { "user": {'Id': user[0]},
                         "iat": current_time,
@@ -60,6 +64,7 @@ class LoginService:
                                key=ConfigLoader().data["JWT"]["Secret"],
                                algorithm="HS256",
                                json_encoder=ExtendedJSONEncoder)
+           # Return token and status
             resp.media = {
                 "access_token": token
             }

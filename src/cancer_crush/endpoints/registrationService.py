@@ -38,8 +38,7 @@ class RegistrationService:
             raise falcon.HTTPBadRequest("Bad Request", "Missing required field(s).")
         else:
             # Add user to DB
-            self._authenticate(req_params["Email"], req_params["Password"], req, resp)
-            User().add_user(req_params["First_Name"],
+            user = User().add_user(req_params["First_Name"],
                          req_params["Last_Name"],
                          req_params["Email"],
                          req_params["Password"],
@@ -48,9 +47,13 @@ class RegistrationService:
                          req_params["Practice"],
                          req_params["Area_Code"])
 
+            # Check if user was successfully added
+            if not user:
+                raise falcon.HTTPBadRequest("Bad Request", "Could not add user.")
+
             # Create JWT token
             current_time = datetime.utcnow()
-            payload = { "user": {'Email': email, 'Password': password},
+            payload = { "user": {'Id': user[0]},
                         "iat": current_time,
                         "nbf": current_time,
                         "exp": current_time + timedelta(seconds=(8 * 60 * 60))}

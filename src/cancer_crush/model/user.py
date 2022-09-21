@@ -63,7 +63,7 @@ class User:
          # Check for required fields
          if not first_name or not last_name or not email or not password or not npi or not field or not practice or not area_code:
             print("Bad Request: Missing required fields.")
-            return False
+            return []
 
          else:
             # Verify user email not already in user
@@ -73,22 +73,22 @@ class User:
 
             if email in emails:
                 print("User with that email already exists.")
-                return False
+                return []
 
             # Hash password for storage
             salt = bcrypt.gensalt()
-            password_hash = bcrypt.hashpw(password, salt)
+            password_hash = bcrypt.hashpw(password.encode("utf-8"), salt)
 
             # Add user to DB
-            cursor.execute("INSERT INTO Users (First_Name, Last_Name, Email, \
-            Password, NPI, Field, Practice, Area_Code) VALUES ({first_name}, \
-            {last_name}, {email}, {password}, {npi}, {field}, {practice}, \
-            {area_code})".format(first_name=first_name, last_name=last_name,
-            email=email, password=password_hash, npi=npi, field=field,
-            practice=practice, area_code=area_code))
+            query = "INSERT INTO Users (First_Name, Last_Name, Email, Password, NPI, Field, Practice, Area_Code) VALUES ('{first_name}', '{last_name}', '{email}', '{password}', '{npi}', '{field}', '{practice}', {area_code})".format(
+            first_name=first_name, last_name=last_name,
+            email=email, password=password_hash.decode("utf-8"), npi=npi, field=field,
+            practice=practice, area_code=area_code)
+            cursor.execute(query)
             self.connection.commit()
             print("New user added.")
-            return True
+            cursor.execute("SELECT Id FROM Users WHERE Email='{email}'".format(email=email))
+            return cursor.fetchone()
 
 
 
