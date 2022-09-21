@@ -1,21 +1,17 @@
 # ================================================== #
-#                   LOGIN SERVICE                    #
+#                  QUIZ QUESTIONS                    #
 # ================================================== #
 # Author: Brady Hammond                              #
 # Created: 09/20/2022                                #
-# Last Edited: 09/20/2022                            #
+# Last Edited: 09/21/2022                            #
 # ================================================== #
 #                                                    #
 # ================================================== #
 
-import jwt
 import json
 import falcon
 import msgpack
-from falcon_auth.serializer import ExtendedJSONEncoder
-from ..config.config_loader import ConfigLoader
 from ..database.setupMySqlDatabase import SetupMySqlDatabase
-from datetime import timedelta, datetime
 from mysql.connector import Error
 
 class QuizQuestions:
@@ -32,7 +28,7 @@ class QuizQuestions:
             resp.status = falcon.HTTP_200
         except Error as e:
             print("Error while getting questions from MySql", e)
-        
+
     def on_post(self, req, resp):
         resp.status = falcon.HTTP_200  # This is the default status
         resp.content_type = falcon.MEDIA_TEXT  # Default is JSON, so override

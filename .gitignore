@@ -230,3 +230,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Project files
+src/cancer_crush/config/config.yaml

@@ -11,7 +11,7 @@
 import click
 from . import __version__
 from .server.server import start_server
-from .config.config_loader import ConfigLoader
+from .config.configLoader import ConfigLoader
 
 @click.command()
 @click.version_option(version=__version__)
@@ -21,11 +21,12 @@ from .config.config_loader import ConfigLoader
                                                      "run on.")
 def main(socket, port):
     """
-    Command line interface for Cancer Crush backend API.
+    Command line interface for Cancer Crush backend API
+    :param socket: specifies a UNIX socket to serve API on
+    :param port: specifies port to serve API on
     """
-    print('Starting server on localhost:{port}...'.format(port=port))
+    print('Server running on localhost:{port}...'.format(port=port))
     start_server(socket, port)
-    print('Server stopped.' )
 
 # ================================================== #
 #                        EOF                         #

@@ -4,3 +4,8 @@ waitress>=2.1
 PyYaml>=6.0
 falcon-auth>=1.1
 falcon-auth[backend-jwt]
+bcrypt>=4.0
+mysql-connector-python>=8.0
+protobuf>=3.0
+waitress>=2.1
+msgpack>=1.0

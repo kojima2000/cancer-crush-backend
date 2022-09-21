@@ -11,40 +11,47 @@
 from waitress import serve
 import falcon
 from falcon_auth import FalconAuthMiddleware, JWTAuthBackend
-from ..config.config_loader import ConfigLoader
+from ..config.configLoader import ConfigLoader
 from ..database.setupMySqlDatabase import SetupMySqlDatabase
 from ..endpoints.quizQuestions import QuizQuestions
-
-class TestResource:
-    def on_get(self, req, resp):
-        """Handles GET requests"""
-        resp.status = falcon.HTTP_200  # This is the default status
-        resp.content_type = falcon.MEDIA_TEXT  # Default is JSON, so override
-        resp.text = ('Test Endpoint')
+from ..endpoints.loginService import LoginService
+from ..endpoints.registrationService import RegistrationService
+from ..endpoints.testService import TestService
 
 def start_server(socket="", port=8080):
-    config = ConfigLoader()
+    """
+    Function to serve up API via waitress WSGI server
+    :param socket: specifies a UNIX socket to serve API on
+    :param port: specifies port to serve API on
+    """
+    # Load config and DB
+    config = ConfigLoader().data
     mySql_db = SetupMySqlDatabase();
-    user_loader = lambda username, password: { 'username': username }
-    jwt_auth = JWTAuthBackend(user_loader, ConfigLoader().data['JWT']['Secret'])
-
-    auth_middleware = FalconAuthMiddleware(jwt_auth, exempt_routes=['/test', '/login', '/questions'])
-    app = falcon.App(middleware=[auth_middleware])
     mySql_db.setup_db()
-    test = TestResource()
+
+    # Setup middleware
+    user_loader = lambda id: { 'Id': id }
+    jwt_auth = JWTAuthBackend(user_loader, config['JWT']['Secret'])
+    auth_middleware = FalconAuthMiddleware(jwt_auth, exempt_routes=['/test', '/login', '/register'])
+    app = falcon.App(middleware=[auth_middleware])
+
+    # Setup endpoints
+    test = TestService()
     questions = QuizQuestions()
+    login = LoginService()
+    register = RegistrationService()
     app.add_route('/test', test)
     app.add_route('/questions', questions)
+    app.add_route('/login', login)
+    app.add_route('/register', register)
 
+    # Serve up API
     if not socket:
         serve(app, port=port)
     else:
         serve(app, unix_socket=socket)
 
     mySql_db.disconnect_db()
-
-   
-    
 
 # ================================================== #
 #                        EOF                         #
