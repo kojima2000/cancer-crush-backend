@@ -29,13 +29,16 @@ class RegistrationService:
         """
         # Read in the request and validate fields
         if not req:
-            raise falcon.HTTPBadRequest("Bad Request", "Missing required field(s).")
-        req_params = json.loads(req.stream.read())
-        if (not req_params or not req_params["Email"] or not req_params["Password"]
-        or not req_params["First_Name"] or not req_params["Last_Name"]
-        or not req_params["NPI"] or not req_params["Field"]
-        or not req_params["Practice"] or not req_params["Area_Code"]):
-            raise falcon.HTTPBadRequest("Bad Request", "Missing required field(s).")
+            raise falcon.HTTPBadRequest(description="Missing required field(s).")
+        try:
+            req_params = json.loads(req.stream.read())
+        except:
+            raise falcon.HTTPBadRequest(description="Improperly formed JSON.")
+        if (not req_params or "Email" not in req_params or "Password" not in
+        req_params or "First_Name" not in req_params or "Last_Name" not in
+        req_params or "NPI" not in req_params or "Field" not in req_params or
+        "Practice" not in req_params or "Area_Code" not in req_params):
+            raise falcon.HTTPBadRequest(description="Missing required field(s).")
         else:
             # Add user to DB
             user = User().add_user(req_params["First_Name"],
@@ -49,7 +52,7 @@ class RegistrationService:
 
             # Check if user was successfully added
             if not user:
-                raise falcon.HTTPBadRequest("Bad Request", "Could not add user.")
+                raise falcon.HTTPBadRequest(description="Could not add user.")
 
             # Create JWT token
             current_time = datetime.utcnow()

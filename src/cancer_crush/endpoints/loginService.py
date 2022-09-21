@@ -29,10 +29,14 @@ class LoginService:
         """
         # Read in the request and validate fields
         if not req:
-            raise falcon.HTTPBadRequest("Bad Request", "Please enter a valid email and password.")
-        req_params = json.loads(req.stream.read())
-        if not req_params or not req_params["Email"] or not req_params["Password"]:
-            raise falcon.HTTPBadRequest("Bad Request", "Please enter a valid email and password.")
+            raise falcon.HTTPBadRequest(description="Missing required field(s).")
+        try:
+            req_params = json.loads(req.stream.read())
+        except:
+            raise falcon.HTTPBadRequest(description="Improperly formed JSON.")
+
+        if not req_params or "Email" not in req_params or "Password" not in req_params:
+            raise falcon.HTTPBadRequest(description="Please enter a valid email and password.")
         else:
             # Authenticate user
             self._authenticate(req_params["Email"], req_params["Password"], req, resp)
@@ -47,12 +51,12 @@ class LoginService:
         """
         # Validate fields
         if not email or not password:
-            raise falcon.HTTPBadRequest("Bad Request", "Please enter a valid email and password.")
+            raise falcon.HTTPBadRequest(description="Please enter a valid email and password.")
         else:
             # Verify user exists
             user = User().get_user(email, password)
             if not user:
-                raise falcon.HTTPUnauthorized("Incorrect Password", "The password you entered was incorrect. Please try again.")
+                raise falcon.HTTPUnauthorized(description="The password you entered was incorrect. Please try again.")
 
             # Generate JWT token
             current_time = datetime.utcnow()

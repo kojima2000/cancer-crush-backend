@@ -30,11 +30,6 @@ class QuizQuestions:
         except Error as e:
             print("Error while getting questions from MySql", e)
 
-    def on_post(self, req, resp):
-        resp.status = falcon.HTTP_200  # This is the default status
-        resp.content_type = falcon.MEDIA_TEXT  # Default is JSON, so override
-        resp.text = ('Question Endpoint')
-
 # ================================================== #
 #                        EOF                         #
 # ================================================== #

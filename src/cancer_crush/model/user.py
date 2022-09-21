@@ -66,12 +66,12 @@ class User:
             return []
 
          else:
-            # Verify user email not already in user
+            # Verify user email not already in use (DB should already enforce unique status, but we still check just in case)
             cursor = self.connection.cursor()
             cursor.execute("SELECT Email FROM Users")
             emails = cursor.fetchall()
 
-            if email in emails:
+            if email in [x[0] for x in emails]:
                 print("User with that email already exists.")
                 return []
 
