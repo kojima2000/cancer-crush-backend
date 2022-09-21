@@ -30,6 +30,14 @@ class QuizQuestions:
         except Error as e:
             print("Error while getting questions from MySql", e)
 
+    def on_post(self, req, resp):
+
+        data = json.load(req.stream)
+        SetupMySqlDatabase().insertQuestionsIntoDb(data)
+        resp.text = ('Inserted into the database')
+        resp.status = falcon.HTTP_200  # This is the default status
+        resp.content_type = falcon.MEDIA_TEXT  # Default is JSON, so override
+
 # ================================================== #
 #                        EOF                         #
 # ================================================== #
