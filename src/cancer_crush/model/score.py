@@ -23,6 +23,7 @@ class Score:
 
     def get_score(self, email):
             cursor = self.connection.cursor()
+            cursor.execute("USE {};".format(ConfigLoader().data['Database']['Name']))
             sql = "SELECT * FROM score WHERE Email = %s"
             cursor.execute(sql,(email,))
             score = cursor.fetchall()
@@ -34,17 +35,26 @@ class Score:
          # Check for required fields
          if not email or not score :
             print("Bad Request: Missing required fields.")
-            return []
-         else:
+            return False
+         try:
             cursor = self.connection.cursor()
+            cursor.execute("USE {};".format(ConfigLoader().data['Database']['Name']))
             cursor.execute("Select Id from Users where Email =  %s", (email,))
-            userId = cursor.fetchone()
-            print(userId[0])
-            cursor.execute(
+            userId = cursor.fetchone() 
+            if not userId:
+                print("User not found. please register user or provide orrect email")
+                return False
+            else:
+                print(userId[0])
+                cursor.execute(
                     "INSERT INTO `Score`  (`User_id`,`Email`,`Score`) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE Score = %s",
                     (userId[0],email,score, score))
-            self.connection.commit()
-            print("Scores for user updated successfully!")
+                self.connection.commit()
+                print("Scores for user updated successfully!")
+                return True
+         except:
+             print("Could not add scores")
+             return False
 
 # ================================================== #
 #                        EOF                         #

@@ -25,10 +25,14 @@ class ScoreService:
             req_params = json.loads(req.stream.read())
             email = self.validate_string(req_params["Email"])
             r = Score().get_score(email)         
-            resp.text = json.dumps(r)
-            resp.status = falcon.HTTP_200
+            if r:
+                resp.text = json.dumps(r)
+                resp.status = falcon.HTTP_200
+            else:
+                resp.status = falcon.HTTP_500
         except Error as e:
-            print("Error while getting score for a user from MySql", e)
+            print("Error: Could not retrieve scores", e)
+            resp.status = falcon.HTTP_500
 
     def on_post(self, req, resp):
         if not req:
@@ -43,11 +47,12 @@ class ScoreService:
             email = self.validate_string(req_params["Email"])
             score = self.validate_string(req_params["Score"])
             # Add score to DB
-            Score().add_or_update_score(email, score)
-
-            resp.text=("Inserted score into the database")
-            resp.status = falcon.HTTP_200
- 
+            if Score().add_or_update_score(email, score):
+                resp.text=("Inserted score into the database")
+                resp.status = falcon.HTTP_200
+            else:
+                resp.text=("Error: Could not add scores")
+                resp.status = falcon.HTTP_500
    
     # do validation and checks before insert
     def validate_string(self,val):
