@@ -3,5 +3,5 @@ JWT:
 Database:
   Host: "localhost"
   Username: "root"
-  Password: "Microsoft123$"
+  Password: "hackathon2022"
   Name: "CancerCrush"

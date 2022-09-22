@@ -36,18 +36,21 @@ class Progress:
            return False
         try:
             cursor = self.connection.cursor()
+            cursor.execute("SELECT * FROM Progress WHERE User_Id={user_id} AND Question_Id={question_id}"
+            .format(user_id=user_id, question_id=question_id))
+            exists = cursor.fetchall()
+            if exists:
+                print("Progress for question already exists")
+                return False
             cursor.execute("USE {};".format(ConfigLoader().data['Database']['Name']))
             cursor.execute(
-                "INSERT INTO 'Progress' ('User_Id', 'Question_Id', 'Status') VALUES ({user_id}, {question_id}, {status})"
-                .format(user_id=user_id, question_id=question_id, status=stuats))
+                "INSERT INTO Progress (User_Id, Question_Id, Status) VALUES ({user_id}, {question_id}, {status})"
+                .format(user_id=user_id, question_id=question_id, status=status))
             self.connection.commit()
             return True
         except:
             print("Could not add progress")
             return False
-
-
-
 
 # ================================================== #
 #                        EOF                         #
