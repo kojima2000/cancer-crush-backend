@@ -1,0 +1,221 @@
+{
+	"info": {
+		"_postman_id": "5853b252-beae-4a44-8351-418d691695da",
+		"name": "CancerCrush",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19236056"
+	},
+	"item": [
+		{
+			"name": "Get all questions",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7IklkIjoxfSwiaWF0IjoxNjYzODY5MDE4LCJuYmYiOjE2NjM4NjkwMTgsImV4cCI6MTY2Mzg5NzgxOH0.jOpKaA3eaPantXT3xoxJ_o6CZUAo-ir7ZpGTDoWC2Hc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/questions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"questions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "send question",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7IklkIjoxfSwiaWF0IjoxNjYzODY5MDE4LCJuYmYiOjE2NjM4NjkwMTgsImV4cCI6MTY2Mzg5NzgxOH0.jOpKaA3eaPantXT3xoxJ_o6CZUAo-ir7ZpGTDoWC2Hc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"Id\": \"123\",\r\n        \"Patient_history\": \"Patient was found to have a Right Upper Lobe Adenocarcinoma. He underwent Right Upper Lobe Lobectomy and systematic mediastinal lymph node dissection. Pathology demonstrated a 2.2 cm tumor of adenocarcinoma histology with negative margins. Additionally, there were no visceral pleural invasion and none of the dissected lymph nodes were positive for carcinoma\",\r\n        \"Patient_age\": 120,\r\n        \"Patient_sex\": \"Male\",\r\n        \"Question\": \"What is the next best step in the management of this patient?\",\r\n        \"Correct_answer\": \"Choice_D\",\r\n        \"Answer_details\": \"d. Active surveillance. Patient has pT1c pN0 (stage IA3 ; AJCC 8th Edition Staging System). These patients are often followed with a CT chest every 6 months.\",\r\n        \"Choice_A\": \"Check for PD-L1\",\r\n        \"Choice_B\": \"Check EGFR mutation status\",\r\n        \"Choice_C\": \"4 cycles of platinum-based chemotherapy\",\r\n        \"Choice_D\": \"Active surveillance \"\r\n}",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/questions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"questions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "score",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7IklkIjoyfSwiaWF0IjoxNjYzODcxOTg2LCJuYmYiOjE2NjM4NzE5ODYsImV4cCI6MTY2MzkwMDc4Nn0.EP5Gu2ZNx6K4mG_gZrqDZLBcMDxhwtW_oIoFeQwwCpE",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Email\": \"test1@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/score",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"score"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "store score",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7IklkIjoxfSwiaWF0IjoxNjYzNzkyNjk2LCJuYmYiOjE2NjM3OTI2OTYsImV4cCI6MTY2MzgyMTQ5Nn0.sP67LXL0TgJcp8Gz3hJeObuWhk-G-ZJXQrkNmIvhVow",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Email\": \"test@gmail.com\",\r\n    \"Score\": 200\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/score",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"score"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Email\": \"test@gmail.com\",\r\n    \"Password\": \"test\",\r\n    \"First_Name\": \"f_name\",\r\n    \"Last_Name\": \"l_name\",\r\n    \"NPI\": \"1324\",\r\n    \"Field\":\"abc\",\r\n    \"Practice\": \"abc\",\r\n    \"Area_Code\": \"12345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Email\": \"test@gmail.com\",\r\n    \"Password\": \"test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
