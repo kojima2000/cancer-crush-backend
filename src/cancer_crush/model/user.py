@@ -29,15 +29,20 @@ class User:
         """
         # Check for required fields
         if not email or not password:
-            print("Bad Request: Please enter a valid email and password.")
+            print("Bad Request: Please enter a valid email and password")
         # Get user data and authenticate user
-        else:
+        try:
             cursor = self.connection.cursor()
+            db_query = "USE {};".format(ConfigLoader().data['Database']['Name'])
+            cursor.execute(db_query)
             cursor.execute("SELECT * FROM Users WHERE Email='{email}'".format(email=email))
             user = cursor.fetchone()
             if not bcrypt.checkpw(password.encode("utf-8"), user[4].encode("utf-8")):
                 return []
             return user
+        except:
+            print("Could not retrieve user")
+            return []
 
     def add_user(self,
                  first_name,
@@ -62,17 +67,19 @@ class User:
          """
          # Check for required fields
          if not first_name or not last_name or not email or not password or not npi or not field or not practice or not area_code:
-            print("Bad Request: Missing required fields.")
+            print("Bad Request: Missing required field(s)")
             return []
 
-         else:
+         try:
             # Verify user email not already in use (DB should already enforce unique status, but we still check just in case)
             cursor = self.connection.cursor()
+            db_query = "USE {};".format(ConfigLoader().data['Database']['Name'])
+            cursor.execute(db_query)
             cursor.execute("SELECT Email FROM Users")
             emails = cursor.fetchall()
 
             if email in [x[0] for x in emails]:
-                print("User with that email already exists.")
+                print("User with that email already exists")
                 return []
 
             # Hash password for storage
@@ -86,9 +93,12 @@ class User:
             practice=practice, area_code=area_code)
             cursor.execute(query)
             self.connection.commit()
-            print("New user added.")
+            print("New user added")
             cursor.execute("SELECT Id FROM Users WHERE Email='{email}'".format(email=email))
             return cursor.fetchone()
+         except:
+            print("Could not add user")
+            return []
 
 # ================================================== #
 #                        EOF                         #
