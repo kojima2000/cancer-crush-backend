@@ -71,9 +71,11 @@ class SetupMySqlDatabase:
                                  FOREIGN KEY (Question_id) REFERENCES QuizQuestions (Id));"""
 
                 mySql_Create_Table_Score = """CREATE TABLE IF NOT EXISTS Score (
-                                 Id INT NOT NULL AUTO_INCREMENT,
-                                 User_id INT NOT NULL,
-                                 Score TINYINT NOT NULL,
+                                 Id int(11) NOT NULL AUTO_INCREMENT,
+                                 User_id int(11) NOT NULL,
+                                 Email varchar(256) NOT NULL,
+                                 Score int(11) NOT NULL,
+                                 UNIQUE (email),
                                  PRIMARY KEY (Id),
                                  FOREIGN KEY (User_id) REFERENCES Users (Id));"""
 

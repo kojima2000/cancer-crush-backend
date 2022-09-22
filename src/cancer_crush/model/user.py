@@ -37,9 +37,14 @@ class User:
             cursor.execute(db_query)
             cursor.execute("SELECT * FROM Users WHERE Email='{email}'".format(email=email))
             user = cursor.fetchone()
-            if not bcrypt.checkpw(password.encode("utf-8"), user[4].encode("utf-8")):
+            print(user)
+            if user is None:
+                print ("Bad Request: User not found.")
                 return []
-            return user
+            elif not bcrypt.checkpw(password.encode("utf-8"), user[4].encode("utf-8")):
+                return []
+            else:
+                return user
         except:
             print("Could not retrieve user")
             return []
