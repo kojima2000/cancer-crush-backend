@@ -70,7 +70,8 @@ class LoginService:
                                json_encoder=ExtendedJSONEncoder)
            # Return token and status
             resp.media = {
-                "access_token": token
+                "access_token": token,
+                "user_id": user[0]
             }
             resp.status = falcon.HTTP_200
 

@@ -18,6 +18,7 @@ from ..endpoints.scoreService import ScoreService
 from ..endpoints.loginService import LoginService
 from ..endpoints.registrationService import RegistrationService
 from ..endpoints.testService import TestService
+from ..endpoints.progressService import ProgressService
 
 def start_server(socket="", port=8080):
     """
@@ -42,11 +43,13 @@ def start_server(socket="", port=8080):
     score = ScoreService()
     login = LoginService()
     register = RegistrationService()
+    progress = ProgressService()
     app.add_route('/test', test)
     app.add_route('/questions', questions)
     app.add_route('/score', score)
     app.add_route('/login', login)
     app.add_route('/register', register)
+    app.add_route('/progress', progress)
 
     # Serve up API
     if not socket:

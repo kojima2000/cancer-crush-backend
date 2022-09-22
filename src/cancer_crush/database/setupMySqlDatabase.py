@@ -21,7 +21,6 @@ import os, json
 class SetupMySqlDatabase:
     def __init__(self):
         self.connection = mysql.connector.connect(host= ConfigLoader().data['Database']['Host'],
-                                             database=ConfigLoader().data['Database']['Name'],
                                              user=ConfigLoader().data['Database']['Username'],
                                              password=ConfigLoader().data['Database']['Password'])
 
@@ -29,46 +28,47 @@ class SetupMySqlDatabase:
         try:
             if self.connection.is_connected():
                 db_Info = self.connection.get_server_info()
-                print("Connected to MySQL Server version ", db_Info)
+                print("Connected to MySQL Server version:", db_Info)
                 cursor = self.connection.cursor()
+                self.create_database(cursor)
                 cursor.execute("select database();")
                 record = cursor.fetchone()
-                print("You're connected to database: ", record)
+                print("Connected to database:", record[0])
 
                 mySql_Create_Table_QuizQuestions = """CREATE TABLE IF NOT EXISTS QuizQuestions (
-                                 Id int(11) NOT NULL AUTO_INCREMENT,
-                                 Patient_history varchar(500) ,
-                                 Patient_age int(11) ,
-                                 Patient_sex varchar(250),
-                                 Question varchar(250) NOT NULL,
-                                 Correct_answer varchar(12) NOT NULL,
-                                 Answer_details varchar(1000) NOT NULL,
-                                 Choice_A varchar(250),
-                                 Choice_B varchar(250),
-                                 Choice_C varchar(250),
-                                 Choice_D varchar(250),
-                                 PRIMARY KEY (Id)) """
+                                 Id INT NOT NULL AUTO_INCREMENT,
+                                 Patient_history VARCHAR(512) ,
+                                 Patient_age SMALLINT ,
+                                 Patient_sex VARCHAR(32),
+                                 Question VARCHAR(256) NOT NULL,
+                                 Correct_answer VARCHAR(16) NOT NULL,
+                                 Answer_details VARCHAR(1024) NOT NULL,
+                                 Choice_A VARCHAR(256),
+                                 Choice_B VARCHAR(256),
+                                 Choice_C VARCHAR(256),
+                                 Choice_D VARCHAR(256),
+                                 PRIMARY KEY (Id));"""
 
                 mySql_Create_Table_Users = """CREATE TABLE IF NOT EXISTS Users (
-                                 Id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                 First_Name varchar(256) NOT NULL,
-                                 Last_Name varchar(256) NOT NULL,
-                                 Email varchar(256) NOT NULL UNIQUE,
-                                 Password varchar(256) NOT NULL,
-                                 NPI varchar(256) NOT NULL,
-                                 Field varchar(256) NOT NULL,
-                                 Practice varchar(256) NOT NULL,
-                                 Area_Code int(11) NOT NULL,
-                                 UNIQUE (email)) """
+                                 Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                 First_Name VARCHAR(64) NOT NULL,
+                                 Last_Name VARCHAR(64) NOT NULL,
+                                 Email VARCHAR(128) NOT NULL UNIQUE,
+                                 Password VARCHAR(256) NOT NULL,
+                                 NPI VARCHAR(32) NOT NULL,
+                                 Field VARCHAR(64) NOT NULL,
+                                 Practice VARCHAR(128) NOT NULL,
+                                 Area_Code MEDIUMINT NOT NULL,
+                                 UNIQUE (email));"""
 
                 mySql_Create_Table_Progress = """CREATE TABLE IF NOT EXISTS Progress (
-                                 Id int(11) NOT NULL AUTO_INCREMENT,
-                                 User_id int(11) NOT NULL,
-                                 Question_id int(11) NOT NULL,
-                                 Status varchar(2) NOT NULL,
+                                 Id INT NOT NULL AUTO_INCREMENT,
+                                 User_id INT NOT NULL,
+                                 Question_id INT NOT NULL,
+                                 Status BIT NOT NULL,
                                  PRIMARY KEY (Id),
                                  FOREIGN KEY (User_id) REFERENCES Users (Id),
-                                 FOREIGN KEY (Question_id) REFERENCES QuizQuestions (Id)) """
+                                 FOREIGN KEY (Question_id) REFERENCES QuizQuestions (Id));"""
 
                 mySql_Create_Table_Score = """CREATE TABLE IF NOT EXISTS Score (
                                  Id int(11) NOT NULL AUTO_INCREMENT,
@@ -77,29 +77,73 @@ class SetupMySqlDatabase:
                                  Score int(11) NOT NULL,
                                  UNIQUE (email),
                                  PRIMARY KEY (Id),
-                                 FOREIGN KEY (User_id) REFERENCES Users (Id)) """
+                                 FOREIGN KEY (User_id) REFERENCES Users (Id));"""
 
                 cursor.execute(mySql_Create_Table_QuizQuestions)
                 cursor.execute(mySql_Create_Table_Users)
                 cursor.execute(mySql_Create_Table_Score)
                 cursor.execute(mySql_Create_Table_Progress)
 
+                cursor.execute("USE {};".format(ConfigLoader().data['Database']['Name']))
+                cursor.execute("SELECT * FROM QuizQuestions")
+                if not cursor.fetchall():
+                    with open("src\cancer_crush\config\questions.json") as question_file:
+                        json_obj = json.loads(question_file.read(), strict=False)
+                        for i, item in enumerate(json_obj):
+                            patient_age = self.validate_string(item.get("Patient_age", None))
+                            patient_sex = self.validate_string(item.get("Patient_sex", None))
+                            question = self.validate_string(item.get("Question", None))
+                            patient_history = self.validate_string(item.get("History", None))
+                            correct_answer =  self.validate_string(item.get("Correct_answer", None))
+                            choice_A =  self.validate_string(item.get("Choice_A", None))
+                            choice_B =  self.validate_string(item.get("Choice_B", None))
+                            choice_C =  self.validate_string(item.get("Choice_C", None))
+                            choice_D =  self.validate_string(item.get("Choice_D", None))
+                            answer_details = self.validate_string(item.get("Answer_details", None))
+                            try:
+                                cursor.execute("INSERT INTO `QuizQuestions`  (`Patient_age`,`Patient_sex`,`Question`,`Patient_history`,`Correct_answer`,`Choice_A`, `Choice_B`,`Choice_C`,`Choice_D`,`Answer_details`) VALUES (%s,	%s,	%s, %s, %s, %s, %s, %s, %s, %s);",
+                                (patient_age,patient_sex,question,patient_history,correct_answer,choice_A,choice_B,choice_C,choice_D,answer_details))
+                            except:
+                                print("Could not pre-populate QuizQuestions table")
+                    self.connection.commit()
+                    print("Questions table pre-populated")
 
         except Error as e:
-            print("Error while setting up MySQL", e)
+            print("Error: MySQL setup failed", e)
 
+    def create_database(self, cursor):
+        database_name = ConfigLoader().data['Database']['Name']
+        try:
+            cursor.execute("CREATE DATABASE IF NOT EXISTS {};".format(database_name))
+        except mysql.connector.Error as err:
+            print("Failed creating database: {}".format(err))
 
+        try:
+            self.connection.database = database_name
+        except mysql.connector.Error as err:
+            print("Database {} does not exists".format(database_name))
+            if err.errno == errorcode.ER_BAD_DB_ERROR:
+                create_database(cursor)
+                print("Database {} created successfully".format(database_name))
+                self.connection.database = database_name
+            else:
+                print(err)
 
     def getConnection(self):
         return self.connection
-
-
 
     def disconnect_db(self):
         if self.connection.is_connected():
             self.connection.cursor().close()
             self.connection.close()
-            print("MySQL connection is closed")
+            print("Database connection terminated")
+
+    def validate_string(self,val):
+        if val != None:
+            if type(val) is int:
+                return str(val).encode('utf-8')
+            else:
+                return val
 
 # ================================================== #
 #                        EOF                         #
