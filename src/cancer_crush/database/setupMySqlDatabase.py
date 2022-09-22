@@ -73,7 +73,9 @@ class SetupMySqlDatabase:
                 mySql_Create_Table_Score = """CREATE TABLE IF NOT EXISTS Score (
                                  Id int(11) NOT NULL AUTO_INCREMENT,
                                  User_id int(11) NOT NULL,
+                                 Email varchar(256) NOT NULL,
                                  Score int(11) NOT NULL,
+                                 UNIQUE (email),
                                  PRIMARY KEY (Id),
                                  FOREIGN KEY (User_id) REFERENCES Users (Id)) """
 

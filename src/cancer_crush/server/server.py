@@ -14,6 +14,7 @@ from falcon_auth import FalconAuthMiddleware, JWTAuthBackend
 from ..config.configLoader import ConfigLoader
 from ..database.setupMySqlDatabase import SetupMySqlDatabase
 from ..endpoints.quizQuestions import QuizQuestions
+from ..endpoints.scoreService import ScoreService
 from ..endpoints.loginService import LoginService
 from ..endpoints.registrationService import RegistrationService
 from ..endpoints.testService import TestService
@@ -38,10 +39,12 @@ def start_server(socket="", port=8080):
     # Setup endpoints
     test = TestService()
     questions = QuizQuestions()
+    score = ScoreService()
     login = LoginService()
     register = RegistrationService()
     app.add_route('/test', test)
     app.add_route('/questions', questions)
+    app.add_route('/score', score)
     app.add_route('/login', login)
     app.add_route('/register', register)
 

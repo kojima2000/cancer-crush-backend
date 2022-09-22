@@ -56,7 +56,7 @@ class LoginService:
             # Verify user exists
             user = User().get_user(email, password)
             if not user:
-                raise falcon.HTTPUnauthorized(description="The password you entered was incorrect. Please try again.")
+                raise falcon.HTTPUnauthorized(description="The password you entered was incorrect or user is not registered. Please try again.")
 
             # Generate JWT token
             current_time = datetime.utcnow()
