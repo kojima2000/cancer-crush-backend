@@ -37,8 +37,8 @@ class SetupMySqlDatabase:
 
                 mySql_Create_Table_QuizQuestions = """CREATE TABLE IF NOT EXISTS QuizQuestions (
                                  Id int(11) NOT NULL AUTO_INCREMENT,
-                                 Patient_history varchar(500) NOT NULL,
-                                 Patient_age int(11) NOT NULL,
+                                 Patient_history varchar(500) ,
+                                 Patient_age int(11) ,
                                  Patient_sex varchar(250),
                                  Question varchar(250) NOT NULL,
                                  Correct_answer varchar(12) NOT NULL,
@@ -86,44 +86,12 @@ class SetupMySqlDatabase:
         except Error as e:
             print("Error while setting up MySQL", e)
 
-    def insertQuestionsIntoDb(self,json_obj):
-                #json_obj = json.loads(data, strict=False)
-
-                cursor = self.connection.cursor()
-
-                # parse json data to SQL insert
-               
-                patient_age = self.validate_string(json_obj["Patient_age"])
-                patient_sex = self.validate_string(json_obj["Patient_sex"])
-                question = self.validate_string(json_obj["Question"])
-                patient_history = self.validate_string(json_obj["Patient_history"])
-                correct_answer =  self.validate_string(json_obj["Correct_answer"])
-                choice_A =  self.validate_string(json_obj["Choice_A"])
-                choice_B =  self.validate_string(json_obj["Choice_B"])
-                choice_C =  self.validate_string(json_obj["Choice_C"])
-                choice_D =  self.validate_string(json_obj["Choice_D"])
-                answer_details = self.validate_string(json_obj["Answer_details"])
-                #links =  str(self.validate_string(item.get("Links", None)))
-
-                cursor.execute(
-                        "INSERT INTO `QuizQuestions`  (`Patient_age`,`Patient_sex`,`Question`,`Patient_history`,`Correct_answer`,`Choice_A`, `Choice_B`,`Choice_C`,`Choice_D`,`Answer_details`) VALUES (%s,	%s,	%s, %s, %s, %s, %s, %s, %s, %s)",
-                        (patient_age,patient_sex,question,patient_history,correct_answer,choice_A,choice_B,choice_C,choice_D,answer_details))
-                self.connection.commit()
-                print("Sample questions inserted successfully!")
 
 
     def getConnection(self):
         return self.connection
 
-    # do validation and checks before insert
-    def validate_string(self,val):
-        if val != None:
-            if type(val) is int:
-                #for x in val:
-                #   print(x)
-                return str(val).encode('utf-8')
-            else:
-                return val
+
 
     def disconnect_db(self):
         if self.connection.is_connected():
