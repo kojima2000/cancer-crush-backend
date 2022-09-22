@@ -1,5 +1,5 @@
 # ================================================== #
-#                     USER MODEL                     #
+#                   QUESTION MODEL                   #
 # ================================================== #
 # Author: Niharika Tippabhatla                       #
 # Created: 09/21/2022                                #
@@ -29,7 +29,6 @@ class Question:
                for i, value in enumerate(row)) for row in questions]
             return r;
 
-
     def add_question (self,patient_age,patient_sex,question,patient_history,correct_answer,choice_A,choice_B,choice_C,choice_D,answer_details
                  ):
 
@@ -38,21 +37,13 @@ class Question:
             print("Bad Request: Missing required fields.")
             return []
 
-         else:         
+         else:
                 cursor = self.connection.cursor()
                 cursor.execute(
                         "INSERT INTO `QuizQuestions`  (`Patient_age`,`Patient_sex`,`Question`,`Patient_history`,`Correct_answer`,`Choice_A`, `Choice_B`,`Choice_C`,`Choice_D`,`Answer_details`) VALUES (%s,	%s,	%s, %s, %s, %s, %s, %s, %s, %s)",
                         (patient_age,patient_sex,question,patient_history,correct_answer,choice_A,choice_B,choice_C,choice_D,answer_details))
                 self.connection.commit()
                 print("Sample questions inserted successfully!")
-
-
-                
-
-
-
-
-
 
 # ================================================== #
 #                        EOF                         #

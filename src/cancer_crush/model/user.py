@@ -90,12 +90,6 @@ class User:
             cursor.execute("SELECT Id FROM Users WHERE Email='{email}'".format(email=email))
             return cursor.fetchone()
 
-
-
-
-
-
-
 # ================================================== #
 #                        EOF                         #
 # ================================================== #
