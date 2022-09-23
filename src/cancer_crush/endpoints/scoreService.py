@@ -24,7 +24,7 @@ class ScoreService:
         try:
             req_params = json.loads(req.stream.read())
             email = self.validate_string(req_params["Email"])
-            r = Score().get_score(email)         
+            r = Score().get_score(email)
             if r:
                 resp.text = json.dumps(r)
                 resp.status = falcon.HTTP_200
@@ -43,7 +43,7 @@ class ScoreService:
             raise falcon.HTTPBadRequest(description="Improperly formed JSON.")
         if (not req_params ):
             raise falcon.HTTPBadRequest(description="Missing required field(s).")
-        else:               
+        else:
             email = self.validate_string(req_params["Email"])
             score = self.validate_string(req_params["Score"])
             # Add score to DB
@@ -53,13 +53,11 @@ class ScoreService:
             else:
                 resp.text=("Error: Could not add scores")
                 resp.status = falcon.HTTP_500
-   
+
     # do validation and checks before insert
     def validate_string(self,val):
         if val != None:
             if type(val) is int:
-                #for x in val:
-                #   print(x)
                 return str(val).encode('utf-8')
             else:
                 return val

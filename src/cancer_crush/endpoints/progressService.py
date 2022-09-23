@@ -37,7 +37,6 @@ class ProgressService:
             if Progress().add_progress(req_params["User_Id"], req_params["Question_Id"], req_params["Status"]):
                 resp.status = falcon.HTTP_200
             else:
-                print("Error: Could not add progress")
                 resp.status = falcon.HTTP_500
 
     def on_get(self, req, resp):

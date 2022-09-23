@@ -27,9 +27,6 @@ class User:
         :param email: user email
         :param password: user password
         """
-        # Check for required fields
-        if not email or not password:
-            print("Bad Request: Please enter a valid email and password")
         # Get user data and authenticate user
         try:
             cursor = self.connection.cursor()
@@ -37,7 +34,6 @@ class User:
             cursor.execute(db_query)
             cursor.execute("SELECT * FROM Users WHERE Email='{email}'".format(email=email))
             user = cursor.fetchone()
-            print(user)
             if user is None:
                 print ("Bad Request: User not found.")
                 return []
@@ -70,11 +66,6 @@ class User:
          :param practice: user medical practice
          :param area_code: user area code
          """
-         # Check for required fields
-         if not first_name or not last_name or not email or not password or not npi or not field or not practice or not area_code:
-            print("Bad Request: Missing required field(s)")
-            return []
-
          try:
             # Verify user email not already in use (DB should already enforce unique status, but we still check just in case)
             cursor = self.connection.cursor()

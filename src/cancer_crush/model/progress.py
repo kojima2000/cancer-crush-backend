@@ -31,11 +31,9 @@ class Progress:
             return []
 
     def add_progress(self, user_id, question_id, status):
-        if not user_id or not question_id or not status:
-           print("Bad Request: Missing required field(s)")
-           return False
         try:
             cursor = self.connection.cursor()
+            cursor.execute("USE {};".format(ConfigLoader().data['Database']['Name']))
             cursor.execute("SELECT * FROM Progress WHERE User_Id={user_id} AND Question_Id={question_id}"
             .format(user_id=user_id, question_id=question_id))
             exists = cursor.fetchall()

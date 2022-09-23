@@ -57,7 +57,6 @@ class QuizQuestions:
                         patient_age,patient_sex,question,patient_history,correct_answer,choice_A,choice_B,choice_C,choice_D,answer_details):
                         resp.status = falcon.HTTP_200
             else:
-                print("Error: Could not add question")
                 resp.status = falcon.HTTP_500
 
     # do validation and checks before insert

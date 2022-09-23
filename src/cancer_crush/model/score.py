@@ -32,15 +32,11 @@ class Score:
             return r;
 
     def add_or_update_score(self,email,score):
-         # Check for required fields
-         if not email or not score :
-            print("Bad Request: Missing required fields.")
-            return False
          try:
             cursor = self.connection.cursor()
             cursor.execute("USE {};".format(ConfigLoader().data['Database']['Name']))
             cursor.execute("Select Id from Users where Email =  %s", (email,))
-            userId = cursor.fetchone() 
+            userId = cursor.fetchone()
             if not userId:
                 print("User not found. please register user or provide orrect email")
                 return False

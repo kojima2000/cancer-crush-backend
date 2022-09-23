@@ -31,11 +31,6 @@ class Question:
             return []
 
     def add_question (self,patient_age,patient_sex,question,patient_history,correct_answer,choice_A,choice_B,choice_C,choice_D,answer_details):
-        # Check for required fields
-        if not correct_answer or not answer_details :
-            print("Bad Request: Missing required field(s)")
-            return False
-
         try:
             cursor = self.connection.cursor()
             cursor.execute("USE {};".format(ConfigLoader().data['Database']['Name']))
